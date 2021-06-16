@@ -1,0 +1,54 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x", crossorigin="anonymous")
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css")
+        title Editar Doctor
+    body 
+        div 
+            form(action="/admin/ver-doctor/editar", method="post")
+                label(for="nombre") Nombre
+                - var nombre = medico[0].nombre
+                input(type="text", name="nombre", value=nombre)
+                label(for="apellido1") Apellido Paterno 
+                - var apellido1 = medico[0].apellido1 
+                input(type="text" name="apellido1" value=apellido1)
+                label(for="apellido2") Apellido Materno
+                - var apellido2 = medico[0].apellido2 
+                input(type="text" name="apellido2" value=apellido2) 
+                label(for="nss") NSS
+                - var nss = medico[0].nss 
+                input(type="text" name="nss" value=nss)
+                label(for="curp") CURP 
+                - var curp = medico[0].curp 
+                input(type="text" name="curp" value=curp)
+                label(for="domicilio") Domicilio
+                - var domicilio = medico[0].domicilio 
+                input(type="text" name="domicilio" value=domicilio)
+                label(for="sexo") Sexo 
+                - var sexo = medico[0].sexo
+                div 
+                    if(sexo == 'M')
+                        input(type="radio", name="sexo" value="M" checked)
+                    else
+                        input(type="radio", name="sexo" value="M")
+                    label(for="M") Masculino
+                    if(sexo == 'F')
+                        input(type="radio", name="sexo" value="F" checked)
+                    else
+                        input(type="radio", name="sexo" value="F")
+                    label(for="F") Femenino
+                label(for="fecha_nac") Fecha de Nacimiento
+                - var fecha_nac = medico[0].fecha_nac  
+                input(type="date", name="fecha_nac" value=fecha_nac)
+                label(for="fecha_ingreso") Fecha de Ingreso 
+                - var fecha_ingreso = medico[0].fecha_ingreso
+                input(type="date", name="fecha_ingreso" value=fecha_ingreso)
+                label(for="especialidad") Especialidad 
+                - var especialidad = medico[0].especialidad
+                input(type="text", name="especialidad" value=especialidad)
+                input.btn.btn-primary(type="submit", value="Actualizar" id="button")
+                button.btn.btn-danger(type="reset") Eliminar 

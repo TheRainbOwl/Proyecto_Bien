@@ -1,0 +1,47 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x", crossorigin="anonymous")
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css")
+        title Ver Doctores
+    body
+        div(class="w-100 p-4")
+            table(class="table table-striped table-responsive")
+                thead
+                    tr
+                        th(scope="col" class="text-center") #
+                        th(scope="col" class="text-center") Nombre
+                        th(colspan="2" scope="col" class="text-center") Apellidos
+                        th(scope="col" class="text-center") NSS
+                        th(scope="col" class="text-center") CURP
+                        th(scope="col" class="text-center") Domicilio
+                        th(scope="col" class="text-center") Sexo
+                        th(scope="col" class="text-center") Fecha Nacimiento
+                        th(scope="col" class="text-center") Ingreso Hospital 
+                        th(scope="col" class="text-center") Especialidad
+                        th(colspan="2" scope="col" class="text-center") Funciones
+                tbody(id="tbody")
+                    - for(var i = 0; i < medicosSize; i++)
+                        tr  
+                            th(scope="row text-center") #{medicos[i].id}
+                            td(class="text-center") #{medicos[i].nombre}
+                            td(class="text-center") #{medicos[i].apellido1}
+                            td(class="text-center") #{medicos[i].apellido2}
+                            td(class="text-center") #{medicos[i].nss}
+                            td(class="text-center") #{medicos[i].curp}
+                            td(class="text-justify") #{medicos[i].domicilio}
+                            td(class="text-center") #{medicos[i].sexo}
+                            td(class="text-center") #{medicos[i].fecha_nac}
+                            td(class="text-center") #{medicos[i].fecha_ingreso}
+                            td(class="text-center") #{medicos[i].especialidad}
+                            td(class="text-center") 
+                                    button(class="btn btn-outline-primary button-Edit" type="button")
+                                            i(class="bi bi-pencil-square") 
+                            td(class="text-center") 
+                                button(class="btn btn-outline-danger button-delete" id="button-delete")
+                                    i(class="bi bi-trash-fill")
+    script(src="/js/ver_doctores.js")                 
+                
