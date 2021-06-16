@@ -19,6 +19,7 @@
 - views : Van los archivos .pug, es una forma rápida de escribir HTML y se le pueden pasar variables con #{variable}. [Documentacion Pug](https://pugjs.org/language/code.html) y [Guia Rapida Pug](https://www.sitepoint.com/a-beginners-guide-to-pug/).
 - public: Aqui van archivos estáticos como CSS pero solo tiene la carpeta js.
 - public/js: Esta carpeta contiene los archivos de javascript de algunos archivos.pug, esto no es NodeJs, es solo Js.
+- routes: Solo contiene el index.js que es el que hace TODO, se pueden hacer los GET y POST.
 
 - Links que tal vez sirvan: [Bootstrap Documentacion](https://getbootstrap.com/docs/4.1/getting-started/introduction/) y [W3schools Bootstrap](https://www.w3schools.com/bootstrap4/default.asp).
 
