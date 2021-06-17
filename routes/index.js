@@ -142,8 +142,14 @@ router.post("/editar-doctor", (req, res) =>{
 
 router.post("/admin/ver-doctor/editar", async (req, res) =>{
     const data = req.body
+    let doctorCita = await pool.query("SELECT * FROM cita WHERE id_doctor = $1", [dataEditID]);
+    let doctorCitaSize = doctorCita.rowCount
     await pool.query("UPDATE medico SET nombre = $1, apellido1 = $2, apellido2 = $3, nss = $4, curp = $5, domicilio = $6, sexo = $7, fecha_nac = $8, fecha_ingreso = $9, especialidad = $10 WHERE id = $11", [data.nombre, data.apellido1, data.apellido2, data.nss, data.curp, data.domicilio, data.sexo, data.fecha_nac, data.fecha_ingreso, data.especialidad, dataEditID])
     await pool.query("UPDATE medico_usuarios SET usuario = $1, contrasenia = $2 WHERE id = $3", [data.curp, data.nombre, dataEditID])
+    
+    if(doctorCitaSize != 0){
+        await pool.query("UPDATE cita SET doctornombre = $1, doctorapellido1 = $2, doctorcurp = $3 WHERE id_doctor = $4", [data.nombre, data.apellido1, data.curp, dataEditID])
+    }
     res.redirect("/admin")
 })
 
@@ -175,8 +181,12 @@ router.post("/editar-paciente", (req, res) =>{
 
 router.post("/admin/ver-paciente/editar", async (req, res) =>{
     const data = req.body
+    const dataCita = await pool.query("SELECT * FROM cita WHERE id_paciente = $1", [dataEditID]);
+    let dataCitaSize = dataCita.rowCount
     await pool.query("UPDATE paciente SET nombre = $1, apellido1 = $2, apellido2 = $3, nss = $4, curp = $5, domicilio = $6, sexo = $7, fecha_nac = $8, telefono = $9 WHERE id = $10", [data.nombre, data.apellido1, data.apellido2, data.nss, data.curp, data.domicilio, data.sexo, data.fecha_nac, data.telefono, dataEditID])
-    //await pool.query("UPDATE medico_usuarios SET usuario = $1, contrasenia = $2 WHERE id = $3", [data.curp, data.nombre, dataEditID])
+    if(dataCitaSize != 0){
+        await pool.query("UPDATE cita SET pacientenombre = $1, pacienteapellido1 = $2, pacientecurp = $3 WHERE id_paciente = $4", [data.nombre, data.apellido1, data.curp, dataEditID])
+    }
     res.redirect("/admin")
 })
 
@@ -184,11 +194,11 @@ router.post("/admin/cita", async (req, res) =>{
     const data = req.body
     const pacient = data.paciente
     const doctor = data.doctor
-    const dataDoctor = await pool.query("SELECT nombre, apellido1, apellido2, nss, curp, domicilio, sexo, TO_CHAR(fecha_nac::date, 'yyyy-mm-dd') AS fecha_nac, TO_CHAR(fecha_ingreso::date, 'yyyy-mm-dd') as fecha_ingreso, especialidad FROM medico WHERE curp = $1", [doctor])
+    const dataDoctor = await pool.query("SELECT id, nombre, apellido1, apellido2, nss, curp, domicilio, sexo, TO_CHAR(fecha_nac::date, 'yyyy-mm-dd') AS fecha_nac, TO_CHAR(fecha_ingreso::date, 'yyyy-mm-dd') as fecha_ingreso, especialidad FROM medico WHERE curp = $1", [doctor])
     const dataPaciente = await pool.query("SELECT id, nombre, apellido1, apellido2, nss, curp, domicilio, sexo, TO_CHAR(fecha_nac::date, 'yyyy/mm/dd') AS fecha_nac, telefono FROM paciente WHERE curp = $1", [pacient])
     let rowsPaciente = dataPaciente.rows
     let rowsDoctor = dataDoctor.rows
-    await pool.query("INSERT INTO cita(doctornombre, doctorapellido1, doctorcurp, pacientenombre, pacienteapellido1, pacientecurp, dia, hora, habilitado) VALUES($1, $2, $3, $4, $5, $6, $7, $8, true)", [ rowsDoctor[0].nombre, rowsDoctor[0].apellido1, rowsDoctor[0].curp, rowsPaciente[0].nombre, rowsPaciente[0].apellido1, rowsPaciente[0].curp, data.fecha, data.hora])
+    await pool.query("INSERT INTO cita(doctornombre, doctorapellido1, doctorcurp, id_doctor ,pacientenombre, pacienteapellido1, pacientecurp, id_paciente,dia, hora, habilitado) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true)", [ rowsDoctor[0].nombre, rowsDoctor[0].apellido1, rowsDoctor[0].curp, rowsDoctor[0].id, rowsPaciente[0].nombre, rowsPaciente[0].apellido1, rowsPaciente[0].curp, rowsPaciente[0].id, data.fecha, data.hora])
     res.status(200).redirect("/admin")
 })
 

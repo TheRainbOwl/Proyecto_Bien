@@ -48,6 +48,7 @@ CREATE TABLE paciente(
 	apellido2 VARCHAR(50),
 	nss TEXT,
 	curp VARCHAR(18),
+	domicilio VARCHAR(150),
 	sexo CHAR,
 	fecha_nac DATE,
 	telefono VARCHAR(20),
@@ -63,12 +64,15 @@ CREATE TABLE medico_usuarios(
 
 CREATE TABLE cita(
 	id SERIAL,
+	id_doctor SERIAL,
 	doctorNombre VARCHAR(50),
 	doctorApellido1 VARCHAR(50),
 	doctorCurp VARCHAR(18),
+	id_paciente SERIAL,
 	pacienteNombre VARCHAR(50),
 	pacienteApellido1 VARCHAR(50),
 	pacienteCurp VARCHAR(18),
 	dia DATE,
-	hora TIME
+	hora TIME,
+	habilitado BOOL
 );

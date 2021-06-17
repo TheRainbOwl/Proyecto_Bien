@@ -44,8 +44,8 @@ html(lang="es")
                 label(for="fecha_nac") Fecha de Nacimiento
                 - var fecha_nac = paciente[0].fecha_nac  
                 input(type="date", name="fecha_nac" value=fecha_nac)
-                label(for="fecha_ingreso") Telefono
+                label(for="telefono") Telefono
                 - var telefono = paciente[0].telefono
-                input(type="tel", name="fecha_ingreso" value=telefono)
+                input(type="tel", name="telefono" value=telefono)
                 input.btn.btn-primary(type="submit", value="Actualizar" id="button")
                 button.btn.btn-danger(type="reset") Eliminar 
