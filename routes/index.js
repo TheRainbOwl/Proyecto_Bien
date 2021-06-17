@@ -6,7 +6,7 @@
 */
 
 
-const {Router, json} = require("express")
+const {Router, json, query} = require("express")
 const router = Router()
 // POSTGRESQL
 const {Pool} = require("pg")
@@ -24,7 +24,10 @@ const pool = new Pool({
 let dataToReturn
 let dataEditCurp
 let dataEditID
-
+let dataCitaDia
+let dataCitaHora
+let dataCitaCURP1
+let dataCitaCURP2
 // GET PARTE DEL ADMIN
 
 router.get("/", (req, res) =>{
@@ -83,6 +86,17 @@ router.get("/admin/cita", async (req, res) =>{
     let rowsDoctor = dataDoctor.rows
     let rowsDoctorSize = dataDoctor.rowCount
     res.render("cita.pug", { root : __dirname, doctor: rowsDoctor, doctorSize: rowsDoctorSize, paciente: rowsPaciente, pacienteSize : rowsPacienteSize })
+})
+
+router.get("/admin/ver-cita", async (req, res) =>{
+    const data = await pool.query("SELECT doctornombre, doctorapellido1, doctorcurp, pacientenombre, pacienteapellido1, pacientecurp, TO_CHAR(dia::date, 'yyyy-mm-dd') AS dia, hora FROM cita WHERE habilitado = true")
+    const dataRows = data.rows
+    const dataRowsSize = data.rowCount
+    res.status(200).render("ver_citas.pug", { root : __dirname, citas : dataRows, sizeCitas : dataRowsSize})
+})
+
+router.get("/admin/ver-cita/editar", async (req, res) => {
+    res.render("editar_cita.pug", { root : __dirname , citaDia: dataCitaDia, dataHora : dataCitaHora })
 })
 
 router.get("/404", (req, res) =>{
@@ -200,6 +214,32 @@ router.post("/admin/cita", async (req, res) =>{
     let rowsDoctor = dataDoctor.rows
     await pool.query("INSERT INTO cita(doctornombre, doctorapellido1, doctorcurp, id_doctor ,pacientenombre, pacienteapellido1, pacientecurp, id_paciente,dia, hora, habilitado) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, true)", [ rowsDoctor[0].nombre, rowsDoctor[0].apellido1, rowsDoctor[0].curp, rowsDoctor[0].id, rowsPaciente[0].nombre, rowsPaciente[0].apellido1, rowsPaciente[0].curp, rowsPaciente[0].id, data.fecha, data.hora])
     res.status(200).redirect("/admin")
+})
+
+
+router.post("/delete-cita", async (req, res) =>{
+    const data = req.body
+    const dataCita = await pool.query("SELECT TO_CHAR(dia::date, 'yyyy-mm-dd') AS dia, hora, doctorcurp, pacientecurp FROM cita WHERE habilitado = true");
+    const CitaRows = dataCita.rows
+    if(data.dia == CitaRows[0].dia && data.hora == CitaRows[0].hora && data.curpPaciente == CitaRows[0].pacientecurp && data.curpDoc == CitaRows[0].doctorcurp){
+        await pool.query("UPDATE cita SET habilitado = false WHERE dia = $1 AND hora = $2 AND pacientecurp = $3 AND doctorcurp = $4", [data.dia, data.hora, data.curpPaciente, data.curpDoc])    
+    }
+    res.sendStatus(200)
+})
+
+router.post("/editar-cita", async (req, res) =>{
+    const data = req.body
+    dataCitaDia = data.dia
+    dataCitaHora = data.hora
+    dataCitaCURP1 = data.curpPaciente
+    dataCitaCURP2 = data.curpDoc
+    res.sendStatus(200)
+})
+
+router.post("/admin/ver-cita/editar", async (req, res) =>{
+    const data = req.body
+    await pool.query("UPDATE cita SET dia = $1, hora = $2 WHERE doctorcurp = $3 AND pacientecurp = $4", [ data.fecha, data.hora, dataCitaCURP2, dataCitaCURP1 ])
+    res.redirect("/admin")
 })
 
 // ESTE NO SE TOCA, HACE LA CONEXIÓN ENTRE ESTE ARCHIVO Y EL DE app.js PARA QUE FUNCIONEN LAS PETICIONES
