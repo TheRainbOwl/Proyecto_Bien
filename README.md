@@ -1,12 +1,10 @@
   
 # Proyecto Funcional
 
-## Admin:  90%
-- Falta que cuando se edite un paciente o doctor se edite en la tabla de cita.
-
+## Admin:  100%
 ## Medico 10%
 - Solo puede hacer login por el momento.
-- Falta que pueda ver las citas que le tocan.
+- Falta que pueda ver las citas que le tocan, que se pueda editar y eliminar.
 - Falta un formulario para meter varialbes al PDF.
 - Falta que genere el PDF
 - Opciones en su menú para ver su cita o para salir al login.
